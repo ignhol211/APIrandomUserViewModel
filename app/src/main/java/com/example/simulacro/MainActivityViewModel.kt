@@ -11,6 +11,8 @@ import java.io.IOException
 
 class MainActivityViewModel : ViewModel(){
 
+    var userResponse = UserResponse(mutableListOf())
+
     private val _isVisible by lazy { MediatorLiveData<Boolean>() }
     val isVisible : LiveData<Boolean>
         get() = _isVisible
@@ -35,7 +37,7 @@ class MainActivityViewModel : ViewModel(){
         _responseText.value = value
     }
 
-    fun getAllUsers() {
+    fun downloadInfo() {
         viewModelScope.launch {
 
             withContext(Dispatchers.IO) {
@@ -65,7 +67,7 @@ class MainActivityViewModel : ViewModel(){
                             val body = responseBody.string()
                             println(body)
                             val gson = Gson()
-                            val userResponse = gson.fromJson(body, UserResponse::class.java)
+                            userResponse = gson.fromJson(body, UserResponse::class.java)
                             println(userResponse)
                             
                             CoroutineScope(Dispatchers.Main).launch {
@@ -77,6 +79,35 @@ class MainActivityViewModel : ViewModel(){
                     }
                 })
             }
+        }
+    }
+
+    fun getAllUsers(){
+        viewModelScope.launch {
+            setIsVisibleInMainThread(true)
+            delay(2000)
+            setResponseUserInMainThread(userResponse)
+            setIsVisibleInMainThread(false)
+        }
+    }
+
+    fun getMaleUsers(){
+        viewModelScope.launch {
+            setIsVisibleInMainThread(true)
+            delay(2000)
+            val userResponse = UserResponse(userResponse.results.filter { it.gender == "male" })
+            setResponseUserInMainThread(userResponse)
+            setIsVisibleInMainThread(false)
+        }
+    }
+
+    fun getFemaleUsers(){
+        viewModelScope.launch {
+            setIsVisibleInMainThread(true)
+            delay(2000)
+            val userResponse = UserResponse(userResponse.results.filter { it.gender == "female" })
+            setResponseUserInMainThread(userResponse)
+            setIsVisibleInMainThread(false)
         }
     }
 }

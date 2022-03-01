@@ -21,7 +21,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
 
-        viewModel.getAllUsers()
+        viewModel.downloadInfo()
+
+        binding.descargarTodos.setOnClickListener {
+            viewModel.getAllUsers()
+        }
+
+        binding.descargarChicos.setOnClickListener {
+            viewModel.getMaleUsers()
+        }
+
+        binding.descargarChicas.setOnClickListener {
+            viewModel.getFemaleUsers()
+        }
 
         initObserver()
 

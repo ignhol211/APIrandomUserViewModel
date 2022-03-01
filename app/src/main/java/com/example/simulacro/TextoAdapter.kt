@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simulacro.databinding.ItemUserBinding
+import com.google.android.material.snackbar.Snackbar
 
 
 class TextoAdapter (var listaUsers : List<Result>) : RecyclerView.Adapter <TextoAdapter.TextoViewHolder>(){
